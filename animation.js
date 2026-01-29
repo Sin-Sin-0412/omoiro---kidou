@@ -1,4 +1,12 @@
 //! タイトルフェードイン・アウト
+
+// ★ 初期状態を明示的に設定
+gsap.set(".hero-content", {
+  opacity: 1,
+  filter: "blur(0px)",
+  y: 0
+});
+
 const tl = gsap.timeline({
   defaults: {
     filter: "blur(0px)",
@@ -9,17 +17,19 @@ const tl = gsap.timeline({
 });
 
 tl.to(".main-title", {})
-
-.to(".subtitle",{
+  .to(".subtitle", {
     duration: 2,
-  },"-=1.5",);
+  }, "-=1.5");
 
+// ★ scrub を 1 → 0.5 に（より滑らか）
+// ★ end を固定値に変更
 gsap.to(".hero-content", {
   scrollTrigger: {
     trigger: "#hero",
     start: "top top",
-    end: "bottom 60%",
-    scrub: 1,
+    end: "bottom top", // ★ 60% → top に変更（シンプルに）
+    scrub: 0.5, // ★ 1 → 0.5（より滑らか）
+    // markers: true, // ★ デバッグ用（後で消す）
   },
   opacity: 0,
   filter: "blur(20px)",
@@ -27,17 +37,13 @@ gsap.to(".hero-content", {
   ease: "none",
 });
 
-
 //! コンテンツアニメーション
-
-// content-boxそのものをトリガーにする。これなら同じアニメーションにしたい要素を一括でアニメーション可能。
 gsap.utils.toArray(".content-box").forEach((box) => {
   gsap.to(box, {
     scrollTrigger: {
       trigger: box,
       start: "top 93%",
-      // [入る時, 去る時, 戻って入る時, 戻って去る時]
-      toggleActions: "play reverse play reverse", 
+      toggleActions: "play reverse play reverse",
     },
     opacity: 1,
     filter: "blur(0px)",
@@ -46,51 +52,45 @@ gsap.utils.toArray(".content-box").forEach((box) => {
   });
 });
 
- //! 頭の向きを変えるアニメーション
- // headTarget変数そのもにアニメーションをつける
- const nav = document.querySelector(".nav-vertical");
+//! 頭の向きを変えるアニメーション
+const nav = document.querySelector(".nav-vertical");
+nav.addEventListener("mouseenter", () => {
+  if (window.innerWidth >= 1024) {
+    gsap.to(headTarget, {
+      y: 0.5,
+      x: 0.2,
+      duration: 0.8,
+      ease: "power2.out"
+    });
+  }
+});
 
- nav.addEventListener("mouseenter", ()=>{
-  if(window.innerWidth >= 1024){
-  gsap.to(headTarget,{
-    y: 0.5,
-    x: 0.2,
-    duration: 0.8,
-    ease: "power2.out"
-  });
-}
- });
-
- nav.addEventListener("mouseleave", ()=>{
+nav.addEventListener("mouseleave", () => {
   gsap.to(headTarget, {
     y: 0,
     x: 0,
     duration: .8,
     ease: "power2.out"
   })
- })
+});
 
-
- // 電車音
- const soundBtn = document.querySelector('#sound-toggle');
+//! 電車音
+const soundBtn = document.querySelector('#sound-toggle');
 const bgm = document.querySelector('#bgm');
 const btnIcon = soundBtn.querySelector('.icon');
-
 let isPlaying = false;
 
 soundBtn.addEventListener('click', () => {
   if (!isPlaying) {
-    // 再生開始
     bgm.play();
-    bgm.volume = 0; // 最初は無音
-    gsap.to(bgm, { volume: 1, duration: 2 }); // 2秒かけて音量を0.5へ
+    bgm.volume = 0;
+    gsap.to(bgm, { volume: 1, duration: 2 });
     btnIcon.innerText = "OFF";
     isPlaying = true;
   } else {
-    // 停止（フェードアウトしてから停止）
-    gsap.to(bgm, { 
-      volume: 0, 
-      duration: .5, 
+    gsap.to(bgm, {
+      volume: 0,
+      duration: .5,
       onComplete: () => {
         bgm.pause();
         btnIcon.innerText = "ON";
