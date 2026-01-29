@@ -28,8 +28,8 @@ gsap.to(".hero-content", {
     trigger: "#hero",
     start: "top top",
     end: "bottom top", // ★ 60% → top に変更（シンプルに）
-    scrub: 0.5, // ★ 1 → 0.5（より滑らか）
-    // markers: true, // ★ デバッグ用（後で消す）
+    scrub: 1, // ★ 1 → 0.5（より滑らか）
+    markers: true, 
   },
   opacity: 0,
   filter: "blur(20px)",
