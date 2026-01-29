@@ -33,8 +33,7 @@ let scene,
   stats,
   atamaBone,
   isLookingAtMenu = false,
-  isPlayingAction1,
-  lastWidth;
+  isPlayingAction1;
 
 //頭動かす用
 window.headTarget = { x: 0, y: 0 };
@@ -303,12 +302,6 @@ function onWindowResize() {
   const width = window.innerWidth;
   const height = window.innerHeight;
 
-  if(width === lastWidth){
-    return;
-  }
-
-  lastWidth = width;
-  
   const aspect = width / height;
 
   camera.aspect = width / height;
