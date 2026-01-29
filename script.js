@@ -34,7 +34,8 @@ let scene,
   atamaBone,
   isLookingAtMenu = false,
   isPlayingAction1,
-  lastWidth = null;
+  lastWidth = null,
+  lastHeight = null;
 
 //頭動かす用
 window.headTarget = { x: 0, y: 0 };
@@ -303,7 +304,12 @@ function onWindowResize() {
   const width = window.innerWidth;
   const height = window.innerHeight;
 
+  if (width === lastWidth && height === lastHeight) {
+    return;
+  }
+
   lastWidth = width;
+  lastHeight = height;
 
   const aspect = width / height;
 
@@ -338,8 +344,10 @@ function onWindowResize() {
     }
   }
 
-  ScrollTrigger.refresh();
-  
+  if (typeof ScrollTrigger !== 'undefined') {
+    ScrollTrigger.refresh();
+  }
+
 }
 
 //!アニメーション関数

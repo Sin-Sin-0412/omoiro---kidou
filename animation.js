@@ -29,7 +29,10 @@ gsap.to(".hero-content", {
     start: "top top",
     end: "bottom top", // ★ 60% → top に変更（シンプルに）
     scrub: 1, // ★ 1 → 0.5（より滑らか）
-    markers: true, 
+    invalidateOnRefresh: true,
+    onRefresh: (self) => { // ★ 追加
+      self.animation.progress(self.progress);
+    },
   },
   opacity: 0,
   filter: "blur(20px)",
