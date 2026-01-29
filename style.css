@@ -85,7 +85,7 @@ p {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   z-index: -1;
   pointer-events: none;
   opacity: 0;
@@ -130,7 +130,7 @@ p {
 /* 各セクションの基本設定 */
 .section {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -278,7 +278,7 @@ p {
 
   .hero-section {
     padding: 0 5%;
-    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   .main-title {
