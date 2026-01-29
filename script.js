@@ -337,6 +337,9 @@ function onWindowResize() {
       composer.setSize(width, height);
     }
   }
+
+  ScrollTrigger.refresh();
+  
 }
 
 //!アニメーション関数
