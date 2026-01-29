@@ -7,9 +7,7 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { FilmPass } from "three/addons/postprocessing/FilmPass.js";
-// DoFは少し特殊で、標準的なBokehPassなどを使います
 import { BokehPass } from "three/addons/postprocessing/BokehPass.js";
-// fps確認用
 import Stats from "three/addons/libs/stats.module.js";
 
 //!変数定義
@@ -37,13 +35,10 @@ let scene,
   isLookingAtMenu = false,
   isPlayingAction1;
 
-//頭を動かす用 目標とする角度を保持するオブジェクト（GSAPでここをアニメーションさせる）
-//const headTargetにするとanimate.jsから参照できないため、windowでグローバル変数にする。
+//頭動かす用
 window.headTarget = { x: 0, y: 0 };
 
 function init() {
-  //stats = new Stats();
-  //document.body.appendChild(stats.dom);
 
   //!シーン追加
   scene = new THREE.Scene();
@@ -90,7 +85,7 @@ function init() {
   sunLight.shadow.camera.near = 1;
   sunLight.shadow.camera.far = 500;
   sunLight.shadow.radius = 1;
-  sunLight.shadow.mapSize.width = 2048; // デフォルトは512
+  sunLight.shadow.mapSize.width = 2048; 
   sunLight.shadow.mapSize.height = 2048;
 
   scene.add(sunLight);
@@ -99,9 +94,6 @@ function init() {
   const rimLight = new THREE.PointLight(0xffaa00, 2, 1);
   rimLight.position.set(-3.8, 1, -2);
   scene.add(rimLight);
-
-  /*const rimHelper = new THREE.PointLightHelper(rimLight, 0.2);
-  scene.add(rimHelper);*/
 
   //!空の色と地面の反射
   const hemiLight = new THREE.HemisphereLight(0xffc8a0, 0x2c3e50, 0.5);
@@ -114,7 +106,7 @@ function init() {
     scene.environment = texture; // これでモデルが夕焼けを反射する
   });
 
-  //!ハの字背景
+  //!字背景
   const planeGeo = new THREE.PlaneGeometry(800, 400);
   const planeLoader = new THREE.TextureLoader();
 
@@ -154,8 +146,6 @@ function init() {
     });
     canvas.style.opacity = '1';
 
-    //アニメーション
-    //animation1を1回だけ再生し、その後はanimation2を再生
     mixer = new THREE.AnimationMixer(evil);
     const clips = gltf.animations;
     const clip1 = THREE.AnimationClip.findByName(clips, "animation1");
@@ -171,21 +161,16 @@ function init() {
       action2.setLoop(THREE.LoopOnce);
       action2.clampWhenFinished = true;
 
-      //mixerが管理してるいずれかのアニメーションが終わったら実行される
-      // e.action にはたった今終わったアニメーションが入ってる。
       mixer.addEventListener("finished", (e) => {
         if (e.action === action1) {
-          // 最初の1回が終わったら、action2を開始
           isPlayingAction1 = false; 
-          playAction2WithDelay(0); // 最初は待ち時間なしでOK
+          playAction2WithDelay(0); 
         } else if (e.action === action2) {
-          // action2が終わるたびに、ランダムな待ち時間（2秒〜5秒）を作って再実行
           const delay = 2000 + Math.random() * 5000;
           playAction2WithDelay(delay);
         }
       });
 
-      // action2を再生するための専用関数（delay付き）
       function playAction2WithDelay(ms) {
         setTimeout(() => {
           action2.reset();
@@ -198,7 +183,7 @@ function init() {
     }
 
     evil.traverse((child) => {
-      //ファンを探す
+
       if (child.name === "fun1") {
         fun1 = child;
       }
@@ -207,7 +192,7 @@ function init() {
         fun2 = child;
       }
 
-      //プロペラを探す
+
       if (child.name === "pro") {
         pro = child;
       }
@@ -216,13 +201,13 @@ function init() {
         pro2 = child;
       }
 
-      // 頭を探す
+
       if (child.name === "atama") {
         atamaBone = child;
       }
 
       if (child.isMesh) {
-        // 【パキパキ解消】法線を再計算して滑らかにする
+     
         child.geometry.computeVertexNormals();
 
         child.material = new THREE.MeshToonMaterial({
@@ -237,10 +222,8 @@ function init() {
 
     //!埃を追加
     const dustCount = 800;
-    const dustGeometry = new THREE.BufferGeometry(); //大量の点・線・面を効率よく扱うための箱
+    const dustGeometry = new THREE.BufferGeometry(); 
 
-    //点の位置データを入れる配列を作る。GPUにそのまま渡せる高速な数値配列
-    //Float32ArrayはGPUにそのまま渡せる高速な数値配列
     const positions = new Float32Array(dustCount * 3);
 
     for (let i = 0; i < dustCount; i++) {
@@ -265,17 +248,6 @@ function init() {
     dust = new THREE.Points(dustGeometry, dustMaterial);
     scene.add(dust);
 
-    /*//カメラ操作
-    controls = new OrbitControls(camera, renderer.domElement);
-    controls.minDistance = 1;
-    controls.maxDistance = 100;
-
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.5;
-    controls.enabled = true;
-    controls.target.set(0, 1, -2);
-    */
-
     scene.add(evil);
   });
 
@@ -293,7 +265,6 @@ function initPostProcessing() {
   const renderPass = new RenderPass(scene, camera);
   composer.addPass(renderPass);
 
-  //ボケ
   const bokehPass = new BokehPass(scene, camera, {
     focus: 4,
     aperture: 0.001,
@@ -313,7 +284,6 @@ function initPostProcessing() {
 
   composer.addPass(bloom);
 
-  //画面のざらつき
   const filmPass = new FilmPass(
     0.5, //* 粒子の濃さ
     0, //* スキャンライン（横線）の濃さ。0にすれば粒子のみ
@@ -336,13 +306,10 @@ function onWindowResize() {
   camera.aspect = width / height;
 
   if (aspect < 1) {
-    camera.position.x = 2; //スマホ表示時
+    camera.position.x = 2; 
   } else {
-    // 現場流：アスペクト比に応じてFOVを滑らかに計算する
-    // 横長になればなるほど、FOVを85から60へ近づける
-    const minAspect = 1.77; // 16:9
-    const maxAspect = 2.5; // かなりの横長
-
+    const minAspect = 1.77; 
+    const maxAspect = 2.5; 
     if (aspect <= minAspect) {
       camera.fov = 85;
       camera.position.x = 3.9;
@@ -350,9 +317,7 @@ function onWindowResize() {
       camera.fov = 60;
       camera.position.x = 3.9;
     } else {
-      // 1.77から2.5の間を 0.0 〜 1.0 の割合に変換
       const t = (aspect - minAspect) / (maxAspect - minAspect);
-      // 割合(t)を使って、85から60の間を滑らかに補完（線形補完）
       camera.fov = 85 + (60 - 85) * t;
     }
   }
@@ -374,21 +339,15 @@ function onWindowResize() {
 const clock = new THREE.Clock();
 
 function animate() {
-  //stats.begin();
-
   requestAnimationFrame(animate);
 
   const delta = clock.getDelta();
 
-  // 夕日移動
   if (sunLight) sunLight.position.z -= delta * 0.01;
 
-  // カメラの揺れ用
-  // 順番に注意。getDeltaの前で宣言したらエラ−が起きる
-  const time = clock.getElapsedTime(); // カメラの揺れ用
+  const time = clock.getElapsedTime(); 
 
   if (camera) {
-    // positionを直接書き換えるのではなく、わずかに加算する
     camera.position.x += Math.sin(time * 0.8) * 0.0004;
     camera.position.y += Math.cos(time * 0.7) * 0.0004;
     camera.rotation.z += Math.sin(time * 0.5) * 0.0001;
@@ -405,8 +364,6 @@ function animate() {
     mixer.update(delta);
   }
 
-  //頭を動かすアニメーション。
-  //mixer内のアニメーションに上書きするため、mixer.update(delta)より下に書く必要がある。
   if (atamaBone) {
     if(!isPlayingAction1){
     atamaBone.rotation.y = headTarget.y;
@@ -414,7 +371,6 @@ function animate() {
     }
   }
 
-  //首振りさせる
   if (fun1) {
     fun1.rotation.z = Math.sin(time * 0.5) * 0.5;
   }
@@ -423,7 +379,6 @@ function animate() {
     fun2.rotation.z = -Math.sin(time * 0.5) * 0.5;
   }
 
-  //プロペラを回す
   if (pro) pro.rotation.y += delta * 20;
   if (pro2) pro2.rotation.y += delta * 20;
 
@@ -431,7 +386,6 @@ function animate() {
 
   composer.render();
 
-  //stats.end();
 }
 
 init();
