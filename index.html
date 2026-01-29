@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>思色軌道 - Omoiro Kidou</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <button id="sound-toggle" class="sound-button">
+      <span class="icon">ON</span>
+    </button>
+
+    <audio id="bgm" src="audio/train1.mp3" loop></audio>
+    <canvas id="canvas"></canvas>
+
+    <header class="header">
+      <nav class="nav-vertical">
+        <a href="#hero">STATION</a>
+        <a href="#DEPARTURE">DEPARTURE</a>
+        <a href="#PASSENGER">PASSENGER</a>
+        <a href="#DRIVER">DRIVER</a>
+      </nav>
+    </header>
+
+    <main class="content-wrapper">
+      <section id="hero" class="section hero-section">
+        <div class="hero-content">
+          <h1 class="main-title fade-in-element">思色軌道</h1>
+          <p class="subtitle fade-in-element">Omoiro - Kidou</p>
+        </div>
+      </section>
+
+      <section id="DEPARTURE" class="section">
+        <div class="content-box fade-in-element">
+          <h2>01 / DEPARTURE</h2>
+          <div class="content-text">
+            <p class="description">
+              郷愁を誘う夕暮れ。少し寂しい電車の車内。<br>
+              「ノスタルジー」と「エモい」をテーマに<br>
+              記憶の中の情景のような3D空間を表現しました。
+            </p>
+            <p class="description">
+              古い電車、窓の外を流れる景色、回る扇風機。<br>
+              記憶の中で少しぼやけた夢のような空間を目指して<br>
+              ライティングやポストプロセスにこだわりました。<br>
+              粒子感と柔らかさを加え<br>
+              どこか儚い質感を演出しています。
+            </p>
+
+            <div class="tech-stack-wrapper">
+              <span class="tech-label">Tech Stack</span>
+              <ul class="tech-list">
+                <li>Three.js</li>
+                <li>GSAP</li>
+                <li>Blockbench</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="PASSENGER" class="section">
+        <div class="content-box fade-in-element">
+          <h2>02 / PASSENGER</h2>
+          <div class="content-text">
+            <p class="description">
+              窓の外を眺めながら座っているのは AI VTuber「Evil Neuro」。<br>
+              「Neuro-sama」と双子の妹のような存在として<br>
+              Vedal氏の手によって生まれました。
+            </p>
+            <p class="description">
+              海外で活動する彼女が、いつもの配信とは違う<br>
+              日本の古い路面電車に乗っている。<br>
+              この空間は、彼女の旅の途中の一瞬を切り取ったものです。
+            </p>
+
+            <div class="connection-wrapper">
+              <span class="tech-label">Live Feed</span>
+              <div class="link-group">
+                <a
+                  href="https://www.twitch.tv/vedal987"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="connect-link"
+                  >Twitch Channel</a
+                >
+                <a
+                  href="https://www.twitch.tv/vedal987_jp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="connect-link"
+                  >Twitch Channel - JP</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="DRIVER" class="section">
+        <div class="content-box fade-in-element">
+          <h2>03 / DRIVER - Shinya</h2>
+          <div class="content-text">
+            <p class="description">
+              この空間を作った人。<br>
+              3DモデリングやWeb制作をしています。
+            </p>
+
+            <div class="connection-wrapper">
+              <span class="tech-label">Connect</span>
+              <div class="link-group">
+                <a
+                  href="https://x.com/sinsin_chaos"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="connect-link"
+                  >Twitter / X</a
+                >
+                <a
+                  href="https://bsky.app/profile/shinyaxxx.bsky.social"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="connect-link"
+                  >Bluesky</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script type="module" src="script.js"></script>
+    <script type="module" src="animation.js"></script>
+  </body>
+</html>
