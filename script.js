@@ -303,10 +303,7 @@ function onWindowResize() {
   const width = window.innerWidth;
   const height = window.innerHeight;
 
-  const isMobile = width < 768;
-  if(lastWidth !== null && !isMobile && width === lastWidth){
-    return
-  }
+  lastWidth = width;
 
   const aspect = width / height;
 
