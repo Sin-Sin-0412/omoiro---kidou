@@ -1,6 +1,3 @@
-//! タイトルフェードイン・アウト
-
-// ★ 初期状態を明示的に設定
 gsap.set(".hero-content", {
   opacity: 1,
   filter: "blur(0px)",
@@ -16,21 +13,21 @@ const tl = gsap.timeline({
   },
 });
 
-tl.to(".main-title", {})
+tl.to(".main-title", 
+  {}, "+=0.5")
   .to(".subtitle", {
     duration: 2,
   }, "-=1.5");
 
-// ★ scrub を 1 → 0.5 に（より滑らか）
-// ★ end を固定値に変更
+
 gsap.to(".hero-content", {
   scrollTrigger: {
     trigger: "#hero",
     start: "top top",
-    end: "bottom top", // ★ 60% → top に変更（シンプルに）
-    scrub: 1, // ★ 1 → 0.5（より滑らか）
+    end: "bottom 60%", 
+    scrub: 1, 
     invalidateOnRefresh: true,
-    onRefresh: (self) => { // ★ 追加
+    onRefresh: (self) => { 
       self.animation.progress(self.progress);
     },
   },

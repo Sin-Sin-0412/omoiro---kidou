@@ -79,7 +79,6 @@ function init() {
   sunLight.position.set(20, 3, 9.5);
   sunLight.castShadow = true;
   sunLight.shadow.bias = -0.005;
-  //光があたる範囲を広げる設定
   sunLight.shadow.camera.left = -20;
   sunLight.shadow.camera.right = 20;
   sunLight.shadow.camera.top = 4;
@@ -92,7 +91,7 @@ function init() {
 
   scene.add(sunLight);
 
-  //!リムライト 影を落とさず
+  //!リムライト 
   const rimLight = new THREE.PointLight(0xffaa00, 2, 1);
   rimLight.position.set(-3.8, 1, -2);
   scene.add(rimLight);
@@ -105,10 +104,10 @@ function init() {
   const textureLoader = new THREE.TextureLoader();
   textureLoader.load("image/sun3.jpg", (texture) => {
     texture.mapping = THREE.EquirectangularReflectionMapping;
-    scene.environment = texture; // これでモデルが夕焼けを反射する
+    scene.environment = texture; 
   });
 
-  //!字背景
+  //!背景
   const planeGeo = new THREE.PlaneGeometry(800, 400);
   const planeLoader = new THREE.TextureLoader();
 
@@ -287,10 +286,10 @@ function initPostProcessing() {
   composer.addPass(bloom);
 
   const filmPass = new FilmPass(
-    0.5, //* 粒子の濃さ
-    0, //* スキャンライン（横線）の濃さ。0にすれば粒子のみ
-    0, //* スキャンラインの数
-    false, //* 白黒にするかどうか
+    0.5, 
+    0, 
+    0, 
+    false, 
   );
 
   composer.addPass(filmPass);
