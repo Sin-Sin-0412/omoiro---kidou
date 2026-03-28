@@ -78,24 +78,49 @@ nav.addEventListener("mouseleave", () => {
 const soundBtn = document.querySelector('#sound-toggle');
 const bgm = document.querySelector('#bgm');
 const btnIcon = soundBtn.querySelector('.icon');
-let isPlaying = false;
 
-soundBtn.addEventListener('click', () => {
+let audioCtx = null;
+let gainNode = null;
+let isPlaying = false;
+let isFading = false;
+
+function initAudio() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const source = audioCtx.createMediaElementSource(bgm); 
+  gainNode = audioCtx.createGain();
+  source.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+}
+
+soundBtn.addEventListener('click', async () => {
+  if (isFading) return; 
+
+  initAudio();
+
+  if (audioCtx.state === 'suspended') await audioCtx.resume();
+
+  const now = audioCtx.currentTime;
+
   if (!isPlaying) {
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(0, now);
+    gainNode.gain.linearRampToValueAtTime(1, now + 2); 
     bgm.play();
-    bgm.volume = 0;
-    gsap.to(bgm, { volume: 1, duration: 2 });
-    btnIcon.innerText = "OFF";
+    btnIcon.innerText = 'OFF';
     isPlaying = true;
   } else {
-    gsap.to(bgm, {
-      volume: 0,
-      duration: .5,
-      onComplete: () => {
-        bgm.pause();
-        btnIcon.innerText = "ON";
-      }
-    });
-    isPlaying = false;
+    isFading = true;
+    gainNode.gain.cancelScheduledValues(now);
+    gainNode.gain.setValueAtTime(gainNode.gain.value, now); 
+    gainNode.gain.linearRampToValueAtTime(0, now + 0.5); 
+
+    setTimeout(() => {
+      bgm.pause();
+      bgm.currentTime = 0;
+      btnIcon.innerText = 'ON';
+      isPlaying = false;
+      isFading = false;
+    }, 600); 
   }
 });
